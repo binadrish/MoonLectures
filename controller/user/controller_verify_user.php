@@ -16,7 +16,7 @@ try {
     }
 
     // Llamamos al modelo para verificar el usuario
-    $query = $MU->VerificarUsuario($user, $pass);
+    $query = $MU->VerifyUser($user, $pass);
 
     // Preparamos la respuesta
     if (count($query) > 0) {

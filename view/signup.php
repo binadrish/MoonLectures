@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Sign Up</title>
+    <title>Sign Up / Moon Lectures</title>
     <link rel="stylesheet" href="assets/css/style.css">
     <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="../vendor/sweetalert2/sweetalert2.min.css" rel="stylesheet">
@@ -15,7 +15,7 @@
             <div class="row gx-lg-5 align-items-center">
                 <div class="col-lg-6 mb-5 mb-lg-0">
                     <h1 class="my-5 display-3 fw-bold ls-tight">
-                        Crea tu cuenta en<br />
+                        Crea tu cuenta<br />
                         <span class="text-primary">Moon Lectures</span>
                     </h1>
 
@@ -58,6 +58,12 @@
                                 <button type="button" class="btn btn-primary btn-block mb-4" onclick="SignUpUser()">
                                     Registrarse
                                 </button>
+                                <!-- Register button -->
+                                <div class="text-center">
+                                    <p>¿Ya tienes una cuenta? 
+                                        <a href="login.php" class="text-primary">Iniciar sesión aquí</a>
+                                    </p>
+                                </div>
                             </form>
                         </div>
                     </div>

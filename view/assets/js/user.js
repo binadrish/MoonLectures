@@ -95,5 +95,45 @@ function SignUpUser(event){
             confirmButtonText: "Aceptar"
         });
         return false; // Evita la acción posterior
-    }
+    }$.ajax({
+        url: '../controller/user/controller_create_user.php',
+        type: 'POST',
+        data: {
+            name: name,
+            user: usu,
+            pass: con
+        }
+    }).done(function(resp) {
+        try {
+            const response = JSON.parse(resp);
+    
+            if (response.status === "success") {
+                Swal.fire({
+                    title: "Registro exitoso",
+                    text: response.message,
+                    icon: "success",
+                    confirmButtonText: "Ir al login"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = "login.php";
+                    }
+                });
+            } else {
+                Swal.fire({
+                    title: "Error al registrar",
+                    text: response.message,
+                    icon: "error",
+                    confirmButtonText: "Reintentar"
+                });
+            }
+        } catch (e) {
+            Swal.fire({
+                title: "Error inesperado",
+                text: "No se pudo procesar la respuesta del servidor.",
+                icon: "error",
+                confirmButtonText: "Aceptar"
+            });
+        }
+    });
+    
 }
