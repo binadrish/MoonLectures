@@ -1,0 +1,4 @@
+# Readme
+Moon Lectures es una plataforma web para publicar, artículos, blogs, guías y gran variedad de contenidos digitales, con el proposito de fomentar la interacción entre usuarios que compartan intereses.
+
+Este sitio esta construido con HTML, Bootstrap, Javascript y PHP, ademas de algunas librerias como sweetalert2 y jquery.

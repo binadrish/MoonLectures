@@ -28,7 +28,7 @@
                 </h1>
 
                 <p>
-                🔹Explora nuestros artículos 🔹Descubre blogs 🔹Mantente informado 🔹Aprende con nuestras guías
+                🔹Explora artículos 🔹Descubre blogs 🔹Mantente informado 🔹Aprende con nuestras guías
                 </p>
             </div>
 
