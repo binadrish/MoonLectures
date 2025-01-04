@@ -2,8 +2,8 @@ function VerifyUser(event) {
     // Previene el envío automático del formulario
     if (event) event.preventDefault();
 
-    var usu = $("#txt_email").val().trim();
-    var con = $("#txt_pass").val().trim();
+    const usu = document.getElementById("txt_email").value.trim();
+    const con = document.getElementById("txt_pass").value.trim();
 
     if (usu === "" || con === "") {
         Swal.fire({
@@ -14,62 +14,72 @@ function VerifyUser(event) {
         });
         return false; // Evita la acción posterior
     }
-    $.ajax({
-        url:'../controller/user/controller_verify_user.php',
-        type:'POST',
-        data:{
-            user:usu,
-            pass:con
-        }
-    }).done(function(resp){
-        if(resp==0){
-            Swal.fire("Mensaje De Error",'Usuario y/o contrase\u00f1a incorrecta',"error");
-        }else{
-            var data= JSON.parse(resp);
-            if(data[0][5]==='INACTIVO'){
-                return Swal.fire("Mensaje De Advertencia","Lo sentimos el usuario "+usu+" se encuentra suspendido, comuniquese con el administrador","warning");
+
+    // Primera petición para verificar el usuario
+    fetch('../controller/user/controller_verify_user.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({ user: usu, pass: con })
+    })
+    .then(response => response.text())
+    .then(resp => {
+        if (resp == 0) {
+            Swal.fire("Mensaje De Error", 'Usuario y/o contrase\u00f1a incorrecta', "error");
+        } else {
+            const data = JSON.parse(resp);
+            if (data[0][5] === 'INACTIVO') {
+                return Swal.fire(
+                    "Mensaje De Advertencia",
+                    "Lo sentimos el usuario " + usu + " se encuentra suspendido, comuníquese con el administrador",
+                    "warning"
+                );
             }
-            $.ajax({
-                url:'../../controller/user/controller_create_session.php',
-                type:'POST',
-                data: {
-                    iduser: data[0]._id, // Suponiendo que usas MongoDB ObjectId
+            // Segunda petición para crear sesión
+            return fetch('../../controller/user/controller_create_session.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: new URLSearchParams({
+                    iduser: data[0]._id, 
                     user: data[0].email,
                     role: data[0].role
-                }
-            }).done(function(resp){
-                let timerInterval
+                })
+            })
+            .then(() => {
+                let timerInterval;
                 Swal.fire({
-                title: 'BIENVENIDO AL SISTEMA',
-                html: 'Usted sera redireccionado en <b></b> milisegundos.',
-                timer: 2000,
-                timerProgressBar: true,
-                onBeforeOpen: () => {
-                    Swal.showLoading()
-                    timerInterval = setInterval(() => {
-                    const content = Swal.getContent()
-                    if (content) {
-                        const b = content.querySelector('b')
-                        if (b) {
-                        b.textContent = Swal.getTimerLeft()
-                        }
+                    title: 'BIENVENIDO AL SISTEMA',
+                    html: 'Usted será redireccionado en <b></b> milisegundos.',
+                    timer: 2000,
+                    timerProgressBar: true,
+                    didOpen: () => {
+                        Swal.showLoading();
+                        timerInterval = setInterval(() => {
+                            const content = Swal.getHtmlContainer();
+                            if (content) {
+                                const b = content.querySelector('b');
+                                if (b) {
+                                    b.textContent = Swal.getTimerLeft();
+                                }
+                            }
+                        }, 100);
+                    },
+                    willClose: () => {
+                        clearInterval(timerInterval);
                     }
-                    }, 100)
-                },
-                onClose: () => {
-                    clearInterval(timerInterval)
-                }
-                }).then((result) => {
-                    /* Read more about handling dismissals below */
+                }).then(result => {
                     if (result.dismiss === Swal.DismissReason.timer) {
                         location.reload();
                     }
-                })
-            })
-           
+                });
+            });
         }
     })
+    .catch(error => {
+        console.error('Error:', error);
+        Swal.fire("Mensaje De Error", 'Ha ocurrido un error inesperado', "error");
+    });
 }
+
 
 function SignUpUser(event){
     if (event) event.preventDefault();
@@ -95,15 +105,12 @@ function SignUpUser(event){
             confirmButtonText: "Aceptar"
         });
         return false; // Evita la acción posterior
-    }$.ajax({
-        url: '../controller/user/controller_create_user.php',
-        type: 'POST',
-        data: {
-            name: name,
-            user: usu,
-            pass: con
-        }
-    }).done(function(resp) {
+    }fetch('../controller/user/controller_create_user.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({ name:name ,user: usu, pass: con })
+    }).then(response => response.text())
+    .then(resp => {
         try {
             const response = JSON.parse(resp);
     
